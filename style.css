@@ -1,1 +1,179 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
+body {
+  background: #000;
+  color: #fff;
+  font-family: Arial, Helvetica, sans-serif;
+  min-height: 100vh;
+}
+
+/* Main keyboard application */
+
+.keyboard-app {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background: #101010;
+  display: flex;
+  flex-direction: column;
+}
+
+/* OINANCE Header */
+
+.keyboard-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 16px;
+  border-bottom: 1px solid #242424;
+}
+
+.oinance-logo {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #000;
+  border: 1px solid #555;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.keyboard-header h1 {
+  font-size: 18px;
+  letter-spacing: 3px;
+}
+
+.keyboard-header p {
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: #888;
+  margin-top: 3px;
+}
+
+/* Typing area */
+
+.typing-area {
+  margin: 15px;
+  min-height: 100px;
+
+  background: #181818;
+  border: 1px solid #292929;
+  border-radius: 15px;
+
+  padding: 18px;
+
+  display: flex;
+  align-items: flex-start;
+}
+
+#typedText {
+  color: #777;
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+/* Keyboard */
+
+.keyboard {
+  margin-top: auto;
+  padding: 10px 7px 18px;
+  background: #080808;
+  border-top: 1px solid #252525;
+}
+
+.key-row {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+  justify-content: center;
+}
+
+/* Keys */
+
+.key {
+  flex: 1;
+
+  height: 52px;
+
+  border: none;
+  border-radius: 7px;
+
+  background: #252525;
+  color: #fff;
+
+  font-size: 18px;
+  font-weight: 500;
+
+  box-shadow:
+    0 2px 0 #000,
+    inset 0 1px 0 #353535;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.08s,
+    background 0.08s;
+}
+
+.key:active {
+  transform: translateY(2px);
+  background: #3a3a3a;
+}
+
+/* Special buttons */
+
+.special {
+  background: #1c1c1c;
+  color: #aaa;
+  font-size: 15px;
+}
+
+.special:active {
+  background: #333;
+  color: #fff;
+}
+
+/* Space */
+
+.space-key {
+  flex: 4;
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: #999;
+}
+
+/* Bottom row */
+
+.bottom-row {
+  margin-bottom: 0;
+}
+
+/* Small screens */
+
+@media (max-width: 380px) {
+
+  .key {
+    height: 47px;
+    font-size: 16px;
+  }
+
+  .keyboard {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+
+  .key-row {
+    gap: 5px;
+  }
+
+}
