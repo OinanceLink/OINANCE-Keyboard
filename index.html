@@ -6,10 +6,10 @@
 
   <meta
     name="viewport"
-    content="width=device-width, initial-scale=1.0"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
   >
 
-  <title>OINANCE Keyboard</title>
+  <title>Keyboard</title>
 
   <link rel="stylesheet" href="style.css">
 </head>
@@ -18,182 +18,432 @@
 
   <div class="keyboard-app">
 
-    <!-- =========================
-         OINANCE HEADER
-    ========================== -->
+    <!-- =====================================
+         TYPING PREVIEW
+    ====================================== -->
 
-    <header class="keyboard-header">
+    <section class="typing-section">
 
-      <div class="oinance-logo">
-        ◎
+      <div class="typing-top">
+
+        <span class="typing-label">
+          MESSAGE
+        </span>
+
+        <button
+          id="clearButton"
+          class="clear-button"
+        >
+          Clear
+        </button>
+
       </div>
 
-      <div>
-        <h1>OINANCE</h1>
-        <p>KEYBOARD</p>
-      </div>
 
-    </header>
-
-
-    <!-- =========================
-         TYPING AREA
-    ========================== -->
-
-    <div class="typing-area">
-
-      <div id="typedText">
+      <div
+        id="typedText"
+        class="typed-text"
+      >
         Start typing...
       </div>
+
+    </section>
+
+
+    <!-- =====================================
+         SUGGESTIONS
+    ====================================== -->
+
+    <div class="suggestion-bar">
+
+      <button class="suggestion">
+        Hello
+      </button>
+
+      <button class="suggestion">
+        Thanks
+      </button>
+
+      <button class="suggestion">
+        Good
+      </button>
+
+      <button class="suggestion">
+        👍
+      </button>
 
     </div>
 
 
-    <!-- =========================
-         OINANCE FEATURE TOOLBAR
-    ========================== -->
+    <!-- =====================================
+         FEATURE TOOLBAR
+    ====================================== -->
 
     <div class="feature-toolbar">
 
       <button
-        class="feature-button"
-        id="aiButton"
+        class="tool-button"
+        data-panel="aiPanel"
       >
-        🤖
-        <span>AI</span>
+        <span>✦</span>
+        <small>AI</small>
       </button>
 
 
       <button
-        class="feature-button"
-        id="translateButton"
+        class="tool-button"
+        data-panel="translatePanel"
       >
-        🌍
-        <span>Translate</span>
+        <span>文</span>
+        <small>Translate</small>
       </button>
 
 
       <button
-        class="feature-button"
-        id="suggestButton"
+        class="tool-button"
+        data-panel="emojiPanel"
       >
-        💡
-        <span>Suggest</span>
+        <span>●</span>
+        <small>Emoji</small>
       </button>
 
 
       <button
-        class="feature-button"
-        id="calculatorButton"
+        class="tool-button"
+        data-panel="calculatorPanel"
       >
-        🔢
-        <span>Calc</span>
+        <span>＋</span>
+        <small>Calc</small>
       </button>
 
 
       <button
-        class="feature-button"
-        id="currencyButton"
+        class="tool-button"
+        data-panel="moneyPanel"
       >
-        💰
-        <span>Money</span>
+        <span>₦</span>
+        <small>Money</small>
       </button>
 
 
       <button
-        class="feature-button"
-        id="marketButton"
+        class="tool-button"
+        data-panel="clipboardPanel"
       >
-        ₿
-        <span>Markets</span>
+        <span>▣</span>
+        <small>Paste</small>
       </button>
 
 
       <button
-        class="feature-button"
-        id="clipboardButton"
-      >
-        📋
-        <span>Paste</span>
-      </button>
-
-
-      <button
-        class="feature-button"
+        class="tool-button"
         id="voiceButton"
       >
-        🎙️
-        <span>Voice</span>
+        <span>●</span>
+        <small>Voice</small>
       </button>
 
     </div>
 
 
-    <!-- =========================
+    <!-- =====================================
+         FEATURE PANELS
+    ====================================== -->
+
+    <div
+      id="featurePanel"
+      class="feature-panel"
+    >
+
+      <!-- AI -->
+
+      <div
+        id="aiPanel"
+        class="panel-content"
+      >
+
+        <div class="panel-title">
+          AI Writing
+        </div>
+
+        <div class="ai-actions">
+
+          <button data-ai="Rewrite">
+            Rewrite
+          </button>
+
+          <button data-ai="Grammar">
+            Grammar
+          </button>
+
+          <button data-ai="Shorten">
+            Shorten
+          </button>
+
+          <button data-ai="Professional">
+            Professional
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <!-- TRANSLATION -->
+
+      <div
+        id="translatePanel"
+        class="panel-content"
+      >
+
+        <div class="panel-title">
+          Translation
+        </div>
+
+        <div class="translation-row">
+
+          <select id="languageSelect">
+
+            <option value="English">
+              English
+            </option>
+
+            <option value="French">
+              French
+            </option>
+
+            <option value="Spanish">
+              Spanish
+            </option>
+
+            <option value="Portuguese">
+              Portuguese
+            </option>
+
+            <option value="Igbo">
+              Igbo
+            </option>
+
+            <option value="Yoruba">
+              Yoruba
+            </option>
+
+          </select>
+
+          <button id="translateAction">
+            Translate
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <!-- EMOJI -->
+
+      <div
+        id="emojiPanel"
+        class="panel-content"
+      >
+
+        <div class="panel-title emoji-title">
+
+          <span>
+            Black Emoji Collection
+          </span>
+
+          <small>
+            Your design
+          </small>
+
+        </div>
+
+
+        <div
+          id="customEmojiGrid"
+          class="custom-emoji-grid"
+        ></div>
+
+      </div>
+
+
+      <!-- CALCULATOR -->
+
+      <div
+        id="calculatorPanel"
+        class="panel-content"
+      >
+
+        <div class="panel-title">
+          Calculator
+        </div>
+
+
+        <div
+          id="calculatorDisplay"
+          class="calculator-display"
+        >
+          0
+        </div>
+
+
+        <div class="calculator-grid">
+
+          <button data-calc="7">7</button>
+          <button data-calc="8">8</button>
+          <button data-calc="9">9</button>
+          <button data-calc="/">÷</button>
+
+          <button data-calc="4">4</button>
+          <button data-calc="5">5</button>
+          <button data-calc="6">6</button>
+          <button data-calc="*">×</button>
+
+          <button data-calc="1">1</button>
+          <button data-calc="2">2</button>
+          <button data-calc="3">3</button>
+          <button data-calc="-">−</button>
+
+          <button data-calc="0">0</button>
+          <button data-calc=".">.</button>
+
+          <button id="calculatorClear">
+            C
+          </button>
+
+          <button data-calc="+">
+            +
+          </button>
+
+          <button
+            id="calculatorEquals"
+            class="equals"
+          >
+            =
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <!-- MONEY -->
+
+      <div
+        id="moneyPanel"
+        class="panel-content"
+      >
+
+        <div class="panel-title">
+          Money Tools
+        </div>
+
+        <div class="money-grid">
+
+          <button>
+            ₦ USD
+          </button>
+
+          <button>
+            USD ₦
+          </button>
+
+          <button>
+            ₦ GBP
+          </button>
+
+          <button>
+            BTC
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <!-- CLIPBOARD -->
+
+      <div
+        id="clipboardPanel"
+        class="panel-content"
+      >
+
+        <div class="panel-title">
+          Clipboard
+        </div>
+
+        <div class="clipboard-empty">
+          Your copied text will appear here.
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- =====================================
          KEYBOARD
-    ========================== -->
+    ====================================== -->
 
     <main class="keyboard">
 
 
-      <!-- =========================
-           LETTER KEYBOARD
-      ========================== -->
+      <!-- LETTER KEYBOARD -->
 
       <div id="letterKeyboard">
 
-        <!-- Row 1 -->
-
         <div class="key-row">
 
-          <button class="key">Q</button>
-          <button class="key">W</button>
-          <button class="key">E</button>
-          <button class="key">R</button>
-          <button class="key">T</button>
-          <button class="key">Y</button>
-          <button class="key">U</button>
-          <button class="key">I</button>
-          <button class="key">O</button>
-          <button class="key">P</button>
+          <button class="key letter">Q</button>
+          <button class="key letter">W</button>
+          <button class="key letter">E</button>
+          <button class="key letter">R</button>
+          <button class="key letter">T</button>
+          <button class="key letter">Y</button>
+          <button class="key letter">U</button>
+          <button class="key letter">I</button>
+          <button class="key letter">O</button>
+          <button class="key letter">P</button>
 
         </div>
 
 
-        <!-- Row 2 -->
+        <div class="key-row second-row">
 
-        <div class="key-row">
-
-          <button class="key">A</button>
-          <button class="key">S</button>
-          <button class="key">D</button>
-          <button class="key">F</button>
-          <button class="key">G</button>
-          <button class="key">H</button>
-          <button class="key">J</button>
-          <button class="key">K</button>
-          <button class="key">L</button>
+          <button class="key letter">A</button>
+          <button class="key letter">S</button>
+          <button class="key letter">D</button>
+          <button class="key letter">F</button>
+          <button class="key letter">G</button>
+          <button class="key letter">H</button>
+          <button class="key letter">J</button>
+          <button class="key letter">K</button>
+          <button class="key letter">L</button>
 
         </div>
 
 
-        <!-- Row 3 -->
-
         <div class="key-row">
 
-          <button class="key special">
+          <button
+            id="shiftButton"
+            class="key special-key"
+          >
             ⇧
           </button>
 
-          <button class="key">Z</button>
-          <button class="key">X</button>
-          <button class="key">C</button>
-          <button class="key">V</button>
-          <button class="key">B</button>
-          <button class="key">N</button>
-          <button class="key">M</button>
+          <button class="key letter">Z</button>
+          <button class="key letter">X</button>
+          <button class="key letter">C</button>
+          <button class="key letter">V</button>
+          <button class="key letter">B</button>
+          <button class="key letter">N</button>
+          <button class="key letter">M</button>
 
-          <button class="key special">
+          <button
+            id="backspaceButton"
+            class="key special-key"
+          >
             ⌫
           </button>
 
@@ -202,16 +452,12 @@
       </div>
 
 
-      <!-- =========================
-           NUMBER KEYBOARD
-      ========================== -->
+      <!-- NUMBER KEYBOARD -->
 
       <div
         id="numberKeyboard"
-        style="display: none;"
+        class="hidden"
       >
-
-        <!-- Numbers -->
 
         <div class="key-row">
 
@@ -229,15 +475,13 @@
         </div>
 
 
-        <!-- Symbols -->
-
         <div class="key-row">
 
           <button class="key">@</button>
           <button class="key">#</button>
           <button class="key">$</button>
           <button class="key">%</button>
-          <button class="key">&amp;</button>
+          <button class="key">&</button>
           <button class="key">*</button>
           <button class="key">-</button>
           <button class="key">+</button>
@@ -245,8 +489,6 @@
 
         </div>
 
-
-        <!-- More symbols -->
 
         <div class="key-row">
 
@@ -259,7 +501,10 @@
           <button class="key">;</button>
           <button class="key">"</button>
 
-          <button class="key special">
+          <button
+            id="numberBackspace"
+            class="key special-key"
+          >
             ⌫
           </button>
 
@@ -268,15 +513,13 @@
       </div>
 
 
-      <!-- =========================
-           BOTTOM CONTROLS
-      ========================== -->
+      <!-- BOTTOM ROW -->
 
-      <div class="key-row bottom-row">
+      <div class="bottom-row">
 
         <button
           id="numberButton"
-          class="key special"
+          class="bottom-key"
         >
           123
         </button>
@@ -284,24 +527,32 @@
 
         <button
           id="letterButton"
-          class="key special"
-          style="display: none;"
+          class="bottom-key hidden"
         >
           ABC
         </button>
 
 
-        <button class="key special">
-          🌐
+        <button
+          id="globeButton"
+          class="bottom-key"
+        >
+          ◎
         </button>
 
 
-        <button class="key space-key">
-          SPACE
+        <button
+          id="spaceButton"
+          class="space-key"
+        >
+          space
         </button>
 
 
-        <button class="key special">
+        <button
+          id="enterButton"
+          class="bottom-key"
+        >
           ↵
         </button>
 
@@ -311,10 +562,6 @@
 
   </div>
 
-
-  <!-- =========================
-       JAVASCRIPT
-  ========================== -->
 
   <script src="script.js"></script>
 
