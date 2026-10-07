@@ -6,13 +6,15 @@ const numberKeyboard = document.getElementById("numberKeyboard");
 const numberButton = document.getElementById("numberButton");
 const letterButton = document.getElementById("letterButton");
 
+const calculatorButton = document.getElementById("calculatorButton");
+
 let text = "";
 let shiftOn = true;
 
 
-// ==============================
-// NUMBER / LETTER SWITCHING
-// ==============================
+// ======================================
+// LETTER / NUMBER KEYBOARD
+// ======================================
 
 numberButton.addEventListener("click", function () {
 
@@ -36,9 +38,9 @@ letterButton.addEventListener("click", function () {
 });
 
 
-// ==============================
+// ======================================
 // KEYBOARD BUTTONS
-// ==============================
+// ======================================
 
 document.addEventListener("click", function (event) {
 
@@ -99,7 +101,7 @@ document.addEventListener("click", function (event) {
   }
 
 
-  // NUMBER BUTTON
+  // ABC / 123
 
   if (value === "123" || value === "ABC") {
     return;
@@ -110,7 +112,7 @@ document.addEventListener("click", function (event) {
 
   if (value === "🌐") {
 
-    alert("OINANCE Translation & Languages coming next.");
+    alert("OINANCE Translation is coming next.");
 
     return;
   }
@@ -124,7 +126,9 @@ document.addEventListener("click", function (event) {
     /^[A-Z]$/.test(character) &&
     !shiftOn
   ) {
+
     character = character.toLowerCase();
+
   }
 
   text += character;
@@ -132,9 +136,12 @@ document.addEventListener("click", function (event) {
   updateText();
 
 
-  // Turn shift off after typing
+  // Turn shift off after first letter
 
-  if (shiftOn && /^[A-Z]$/.test(value)) {
+  if (
+    shiftOn &&
+    /^[A-Z]$/.test(value)
+  ) {
 
     shiftOn = false;
 
@@ -143,9 +150,9 @@ document.addEventListener("click", function (event) {
 });
 
 
-// ==============================
+// ======================================
 // UPDATE TEXT
-// ==============================
+// ======================================
 
 function updateText() {
 
@@ -164,3 +171,43 @@ function updateText() {
   }
 
 }
+
+
+// ======================================
+// CALCULATOR
+// ======================================
+
+calculatorButton.addEventListener("click", function () {
+
+  const calculation = prompt(
+    "OINANCE Calculator\n\nEnter a calculation:\nExample: 250000 + 75000"
+  );
+
+
+  if (calculation === null) {
+    return;
+  }
+
+
+  try {
+
+    const result = Function(
+      '"use strict"; return (' + calculation + ')'
+    )();
+
+
+    text += result;
+
+    updateText();
+
+  }
+
+  catch (error) {
+
+    alert(
+      "OINANCE Calculator\n\nInvalid calculation."
+    );
+
+  }
+
+});
