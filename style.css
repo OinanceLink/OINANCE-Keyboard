@@ -1,104 +1,269 @@
+/* =========================================
+   OINANCE KEYBOARD
+   MAIN DESIGN
+========================================= */
+
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
+
 body {
   background: #000;
   color: #fff;
-  font-family: Arial, Helvetica, sans-serif;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+
   min-height: 100vh;
 }
 
-/* Main keyboard application */
+
+/* =========================================
+   MAIN APPLICATION
+========================================= */
 
 .keyboard-app {
   width: 100%;
   max-width: 600px;
-  margin: 0 auto;
+
   min-height: 100vh;
+
+  margin: 0 auto;
+
   background: #101010;
+
   display: flex;
   flex-direction: column;
 }
 
-/* OINANCE Header */
+
+/* =========================================
+   OINANCE HEADER
+========================================= */
 
 .keyboard-header {
   display: flex;
+
   align-items: center;
+
   gap: 12px;
+
   padding: 18px 16px;
+
+  background: #0b0b0b;
+
   border-bottom: 1px solid #242424;
 }
 
+
 .oinance-logo {
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
+
   border-radius: 50%;
+
   background: #000;
+
   border: 1px solid #555;
 
   display: flex;
+
   align-items: center;
   justify-content: center;
 
-  font-size: 25px;
+  font-size: 26px;
+
   font-weight: bold;
+
+  box-shadow:
+    0 0 0 2px #111,
+    0 0 15px rgba(255,255,255,0.04);
 }
+
 
 .keyboard-header h1 {
   font-size: 18px;
-  letter-spacing: 3px;
+
+  letter-spacing: 4px;
+
+  font-weight: 700;
 }
+
 
 .keyboard-header p {
   font-size: 9px;
+
   letter-spacing: 3px;
-  color: #888;
+
+  color: #777;
+
   margin-top: 3px;
 }
 
-/* Typing area */
+
+/* =========================================
+   TYPING AREA
+========================================= */
 
 .typing-area {
   margin: 15px;
-  min-height: 100px;
 
-  background: #181818;
-  border: 1px solid #292929;
-  border-radius: 15px;
+  min-height: 100px;
 
   padding: 18px;
 
+  background: #171717;
+
+  border: 1px solid #292929;
+
+  border-radius: 16px;
+
   display: flex;
+
   align-items: flex-start;
+
+  box-shadow:
+    inset 0 1px 0 #222;
 }
+
 
 #typedText {
   color: #777;
+
   font-size: 17px;
+
   line-height: 1.5;
+
+  white-space: pre-wrap;
+
+  word-break: break-word;
 }
 
-/* Keyboard */
+
+/* =========================================
+   OINANCE FEATURE TOOLBAR
+========================================= */
+
+.feature-toolbar {
+  display: flex;
+
+  gap: 8px;
+
+  padding: 10px 8px;
+
+  background: #0b0b0b;
+
+  border-top: 1px solid #222;
+
+  border-bottom: 1px solid #222;
+
+  overflow-x: auto;
+
+  scrollbar-width: none;
+}
+
+
+.feature-toolbar::-webkit-scrollbar {
+  display: none;
+}
+
+
+/* =========================================
+   FEATURE BUTTONS
+========================================= */
+
+.feature-button {
+  min-width: 72px;
+
+  height: 58px;
+
+  border: 1px solid #292929;
+
+  border-radius: 12px;
+
+  background: #181818;
+
+  color: #fff;
+
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+
+  justify-content: center;
+
+  gap: 5px;
+
+  font-size: 20px;
+
+  cursor: pointer;
+
+  flex-shrink: 0;
+
+  transition:
+    transform 0.12s,
+    background 0.12s,
+    border 0.12s;
+}
+
+
+.feature-button span {
+  font-size: 9px;
+
+  color: #999;
+
+  letter-spacing: 0.5px;
+}
+
+
+.feature-button:active {
+  transform: scale(0.94);
+
+  background: #303030;
+
+  border-color: #555;
+}
+
+
+/* =========================================
+   KEYBOARD AREA
+========================================= */
 
 .keyboard {
   margin-top: auto;
+
   padding: 10px 7px 18px;
+
   background: #080808;
+
   border-top: 1px solid #252525;
 }
 
+
+/* =========================================
+   KEY ROW
+========================================= */
+
 .key-row {
   display: flex;
+
   gap: 6px;
+
   margin-bottom: 8px;
+
   justify-content: center;
 }
 
-/* Keys */
+
+/* =========================================
+   NORMAL KEY
+========================================= */
 
 .key {
   flex: 1;
@@ -106,12 +271,15 @@ body {
   height: 52px;
 
   border: none;
-  border-radius: 7px;
+
+  border-radius: 8px;
 
   background: #252525;
+
   color: #fff;
 
   font-size: 18px;
+
   font-weight: 500;
 
   box-shadow:
@@ -125,55 +293,110 @@ body {
     background 0.08s;
 }
 
+
 .key:active {
   transform: translateY(2px);
+
   background: #3a3a3a;
 }
 
-/* Special buttons */
+
+/* =========================================
+   SPECIAL KEYS
+========================================= */
 
 .special {
   background: #1c1c1c;
+
   color: #aaa;
+
   font-size: 15px;
 }
 
+
 .special:active {
   background: #333;
+
   color: #fff;
 }
 
-/* Space */
+
+/* =========================================
+   SPACE KEY
+========================================= */
 
 .space-key {
   flex: 4;
+
   font-size: 11px;
+
   letter-spacing: 2px;
+
   color: #999;
 }
 
-/* Bottom row */
+
+/* =========================================
+   BOTTOM ROW
+========================================= */
 
 .bottom-row {
   margin-bottom: 0;
 }
 
-/* Small screens */
+
+/* =========================================
+   LETTER / NUMBER KEYBOARD
+========================================= */
+
+#letterKeyboard,
+#numberKeyboard {
+  width: 100%;
+}
+
+
+/* =========================================
+   SMALL PHONE SCREENS
+========================================= */
 
 @media (max-width: 380px) {
-
-  .key {
-    height: 47px;
-    font-size: 16px;
-  }
 
   .keyboard {
     padding-left: 5px;
     padding-right: 5px;
   }
 
+
   .key-row {
     gap: 5px;
+  }
+
+
+  .key {
+    height: 47px;
+
+    font-size: 16px;
+  }
+
+
+  .feature-button {
+    min-width: 68px;
+
+    height: 54px;
+  }
+
+}
+
+
+/* =========================================
+   LARGER PHONE SCREENS
+========================================= */
+
+@media (min-width: 381px) {
+
+  .keyboard {
+    padding-left: 8px;
+    padding-right: 8px;
   }
 
 }
