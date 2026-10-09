@@ -1,127 +1,63 @@
-/* =========================================
-   KEYBOARD ELEMENTS
-========================================= */
+// OINANCE KEYBOARD — WORKING VERSION
 
 const typedText = document.getElementById("typedText");
 const clearButton = document.getElementById("clearButton");
 
 const letterKeyboard = document.getElementById("letterKeyboard");
 const numberKeyboard = document.getElementById("numberKeyboard");
-
 const numberButton = document.getElementById("numberButton");
 const letterButton = document.getElementById("letterButton");
-const shiftButton = document.getElementById("shiftButton");
-
-const spaceButton = document.getElementById("spaceButton");
-const enterButton = document.getElementById("enterButton");
 
 const featurePanel = document.getElementById("featurePanel");
 
-let text = "";
+let typedValue = "";
 let shiftOn = true;
 let activePanel = null;
 let calculatorValue = "";
-let lastAnswer = null;
-
 const clipboardHistory = [];
 
-
-/* =========================================
-   EMOJI IMAGE FILES
-========================================= */
-
-const emojiDesigns = [
-  {
-    name: "Collection 1",
-    image: "file_00000000061c8210aa2fa4943eef51be.jpg"
-  },
-  {
-    name: "Collection 2",
-    image: "file_000000000a3081f490c98c485f6b3f66.jpg"
-  },
-  {
-    name: "Collection 3",
-    image: "file_00000000d2f08210bcccd3dcab977e0a.jpg"
-  }
-];
-
-
-/* =========================================
-   UPDATE TYPING AREA
-========================================= */
-
+// TYPING AREA
 function updateText() {
-  if (text.length === 0) {
-    typedText.textContent = "Start typing...";
-    typedText.style.color = "#777";
-    return;
-  }
-
-  typedText.textContent = text;
-  typedText.style.color = "#fff";
+  typedText.textContent = typedValue || "Start typing...";
+  typedText.style.color = typedValue ? "#fff" : "#777";
 }
-
-
-/* =========================================
-   INSERT TEXT
-========================================= */
 
 function insertText(value) {
-  text += value;
+  typedValue += value;
   updateText();
 }
-
-
-/* =========================================
-   DELETE LAST CHARACTER
-========================================= */
 
 function deleteCharacter() {
-  text = Array.from(text).slice(0, -1).join("");
+  typedValue = Array.from(typedValue).slice(0, -1).join("");
   updateText();
 }
 
-
-/* =========================================
-   CLEAR TEXT
-========================================= */
-
-clearButton.addEventListener("click", function () {
-  if (text.length > 0) {
-    clipboardHistory.unshift(text);
+// CLEAR TEXT AND SAVE TO CLIPBOARD
+clearButton.addEventListener("click", () => {
+  if (typedValue.trim()) {
+    clipboardHistory.unshift(typedValue);
     clipboardHistory.splice(10);
     renderClipboard();
   }
 
-  text = "";
+  typedValue = "";
   updateText();
 });
 
-
-/* =========================================
-   UPPERCASE / LOWERCASE
-========================================= */
-
+// UPPERCASE AND LOWERCASE
 function updateLetterCase() {
-  document.querySelectorAll(".key.letter").forEach(function (key) {
-    const original = key.textContent.trim();
-
+  document.querySelectorAll(".key.letter").forEach(key => {
     key.textContent = shiftOn
-      ? original.toUpperCase()
-      : original.toLowerCase();
+      ? key.textContent.toUpperCase()
+      : key.textContent.toLowerCase();
   });
 
-  if (shiftButton) {
-    shiftButton.classList.toggle("shift-active", shiftOn);
-  }
+  document.getElementById("shiftButton")
+    ?.classList.toggle("shift-active", shiftOn);
 }
 
-
-/* =========================================
-   LETTER / NUMBER SWITCH
-========================================= */
-
-numberButton.addEventListener("click", function () {
+// SWITCH BETWEEN LETTERS AND NUMBERS
+numberButton.addEventListener("click", () => {
   letterKeyboard.classList.add("hidden");
   numberKeyboard.classList.remove("hidden");
 
@@ -129,8 +65,7 @@ numberButton.addEventListener("click", function () {
   letterButton.classList.remove("hidden");
 });
 
-
-letterButton.addEventListener("click", function () {
+letterButton.addEventListener("click", () => {
   numberKeyboard.classList.add("hidden");
   letterKeyboard.classList.remove("hidden");
 
@@ -138,14 +73,9 @@ letterButton.addEventListener("click", function () {
   numberButton.classList.remove("hidden");
 });
 
-
-/* =========================================
-   KEYBOARD CLICK HANDLER
-========================================= */
-
-document.addEventListener("click", function (event) {
+// KEYBOARD BUTTONS
+document.addEventListener("click", event => {
   const key = event.target.closest(".key");
-
   if (!key) return;
 
   const value = key.textContent.trim();
@@ -161,17 +91,13 @@ document.addEventListener("click", function (event) {
     return;
   }
 
-  if (value === "SPACE" || value.toLowerCase() === "space") {
+  if (value.toLowerCase() === "space") {
     insertText(" ");
     return;
   }
 
   if (value === "↵") {
     insertText("\n");
-    return;
-  }
-
-  if (value === "123" || value === "ABC") {
     return;
   }
 
@@ -189,60 +115,38 @@ document.addEventListener("click", function (event) {
   }
 });
 
+// SPACE AND ENTER
+document.getElementById("spaceButton")
+  .addEventListener("click", () => insertText(" "));
 
-/* =========================================
-   BOTTOM CONTROLS
-========================================= */
+document.getElementById("enterButton")
+  .addEventListener("click", () => insertText("\n"));
 
-spaceButton.addEventListener("click", function () {
-  insertText(" ");
-});
-
-enterButton.addEventListener("click", function () {
-  insertText("\n");
-});
-
-
-/* =========================================
-   FEATURE PANELS
-========================================= */
-
+// OPEN AND CLOSE FEATURE PANELS
 const toolButtons = document.querySelectorAll(".tool-button");
 const panels = document.querySelectorAll(".panel-content");
 
-toolButtons.forEach(function (button) {
-  button.addEventListener("click", function () {
+toolButtons.forEach(button => {
+  button.addEventListener("click", () => {
     const panelId = button.dataset.panel;
 
     if (!panelId) {
-      alert(
-        "Voice-to-text will be connected when we build the Android keyboard."
-      );
+      alert("Voice typing will be added in a later version.");
       return;
     }
 
     if (activePanel === panelId) {
       featurePanel.classList.remove("open");
 
-      panels.forEach(function (panel) {
-        panel.classList.remove("active");
-      });
-
-      toolButtons.forEach(function (item) {
-        item.classList.remove("active");
-      });
+      panels.forEach(panel => panel.classList.remove("active"));
+      toolButtons.forEach(item => item.classList.remove("active"));
 
       activePanel = null;
       return;
     }
 
-    panels.forEach(function (panel) {
-      panel.classList.remove("active");
-    });
-
-    toolButtons.forEach(function (item) {
-      item.classList.remove("active");
-    });
+    panels.forEach(panel => panel.classList.remove("active"));
+    toolButtons.forEach(item => item.classList.remove("active"));
 
     const selectedPanel = document.getElementById(panelId);
 
@@ -250,16 +154,229 @@ toolButtons.forEach(function (button) {
 
     selectedPanel.classList.add("active");
     button.classList.add("active");
-
     featurePanel.classList.add("open");
+
     activePanel = panelId;
   });
 });
 
+// SUGGESTIONS
+document.querySelectorAll(".suggestion").forEach(button => {
+  button.addEventListener("click", () => {
+    const word = button.textContent.trim();
 
-/* =========================================
-   SUGGESTION BUTTONS
-========================================= */
+    insertText(
+      typedValue && !typedValue.endsWith(" ")
+        ? " " + word
+        : word
+    );
+  });
+});
 
-document.querySelectorAll(".suggestion").forEach(function (button) {
-  button.addEventListener("click", function ()
+// EMOJI DESIGN COLLECTIONS
+document.querySelectorAll(".emoji-collection").forEach(button => {
+  button.addEventListener("click", () => {
+    const image = button.querySelector("img");
+    const preview = document.getElementById("emojiPreview");
+    const status = document.getElementById("emojiStatus");
+
+    if (!image || !preview) return;
+
+    preview.replaceChildren();
+
+    const fullImage = document.createElement("img");
+    fullImage.src = image.getAttribute("src");
+    fullImage.alt = image.alt;
+
+    fullImage.onload = () => {
+      preview.classList.remove("hidden");
+      if (status) {
+        status.textContent = "Collection selected successfully.";
+      }
+    };
+
+    fullImage.onerror = () => {
+      preview.classList.add("hidden");
+
+      if (status) {
+        status.textContent =
+          "Image not found. Please check the image filename in GitHub.";
+      }
+    };
+
+    preview.appendChild(fullImage);
+  });
+});
+
+// CLIPBOARD
+function renderClipboard() {
+  const box = document.getElementById("clipboardItems");
+  if (!box) return;
+
+  box.replaceChildren();
+
+  if (clipboardHistory.length === 0) {
+    box.textContent = "Your saved text will appear here.";
+    return;
+  }
+
+  clipboardHistory.forEach(item => {
+    const button = document.createElement("button");
+
+    button.type = "button";
+    button.textContent = item;
+
+    button.addEventListener("click", () => {
+      insertText(item);
+    });
+
+    box.appendChild(button);
+  });
+}
+
+// CALCULATOR
+const calculatorDisplay =
+  document.getElementById("calculatorDisplay");
+
+function updateCalculatorDisplay(value) {
+  calculatorDisplay.textContent = value || "0";
+}
+
+function calculate(expression) {
+  const tokens = expression.match(
+    /\d*\.?\d+|[()+*/-]/g
+  ) || [];
+
+  if (
+    !expression ||
+    tokens.join("") !== expression.replace(/\s/g, "")
+  ) {
+    throw new Error("Invalid calculation");
+  }
+
+  let index = 0;
+
+  function number() {
+    const token = tokens[index++];
+
+    if (token === "+") return number();
+    if (token === "-") return -number();
+
+    if (token === "(") {
+      const result = addition();
+
+      if (tokens[index++] !== ")") {
+        throw new Error("Missing bracket");
+      }
+
+      return result;
+    }
+
+    const value = Number(token);
+
+    if (token === undefined || !Number.isFinite(value)) {
+      throw new Error("Invalid number");
+    }
+
+    return value;
+  }
+
+  function multiplication() {
+    let result = number();
+
+    while (
+      tokens[index] === "*" ||
+      tokens[index] === "/"
+    ) {
+      const operator = tokens[index++];
+      const next = number();
+
+      result = operator === "*"
+        ? result * next
+        : result / next;
+    }
+
+    return result;
+  }
+
+  function addition() {
+    let result = multiplication();
+
+    while (
+      tokens[index] === "+" ||
+      tokens[index] === "-"
+    ) {
+      const operator = tokens[index++];
+      const next = multiplication();
+
+      result = operator === "+"
+        ? result + next
+        : result - next;
+    }
+
+    return result;
+  }
+
+  const result = addition();
+
+  if (index !== tokens.length || !Number.isFinite(result)) {
+    throw new Error("Cannot calculate");
+  }
+
+  return Number(result.toPrecision(12)).toString();
+}
+
+document.querySelectorAll("[data-calc]").forEach(button => {
+  button.addEventListener("click", () => {
+    calculatorValue += button.dataset.calc;
+    updateCalculatorDisplay(calculatorValue);
+  });
+});
+
+document.getElementById("calculatorClear")
+  .addEventListener("click", () => {
+    calculatorValue = "";
+    updateCalculatorDisplay("0");
+  });
+
+document.getElementById("calculatorBackspace")
+  .addEventListener("click", () => {
+    calculatorValue = calculatorValue.slice(0, -1);
+    updateCalculatorDisplay(calculatorValue);
+  });
+
+document.getElementById("calculatorEquals")
+  .addEventListener("click", () => {
+    try {
+      const result = calculate(calculatorValue);
+
+      calculatorValue = result;
+      updateCalculatorDisplay(result);
+      insertText(result);
+    } catch {
+      updateCalculatorDisplay("Error");
+    }
+  });
+
+// PLACEHOLDERS FOR FEATURES NOT CONNECTED YET
+document.querySelectorAll("[data-ai]").forEach(button => {
+  button.addEventListener("click", () => {
+    alert("The AI assistant will be connected in a later version.");
+  });
+});
+
+document.getElementById("translateAction")
+  .addEventListener("click", () => {
+    alert("Translation will be connected in a later version.");
+  });
+
+document.getElementById("globeButton")
+  .addEventListener("click", () => {
+    alert("Language switching will be added later.");
+  });
+
+// STARTUP
+updateLetterCase();
+updateText();
+renderClipboard();
+updateCalculatorDisplay("0");
