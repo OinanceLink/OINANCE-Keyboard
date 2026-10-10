@@ -380,3 +380,99 @@ updateLetterCase();
 updateText();
 renderClipboard();
 updateCalculatorDisplay("0");
+
+// OINANCE INDIVIDUAL EMOJI SYSTEM 🖤🐈‍⬛
+
+const oinanceEmojiCategories = {
+  smileys: [
+    "😀", "😃", "😄", "😁", "😂", "🤣",
+    "🥰", "😍", "😘", "😎", "😭", "😴",
+    "😊", "😉", "🤗", "🥹", "😇", "🤔",
+    "😢", "😡", "🥳", "🤩", "😋", "🙃"
+  ],
+
+  hearts: [
+    "❤️", "🖤", "🤍", "💖", "💗", "💓",
+    "💕", "💞", "💘", "💝", "💔", "❤️‍🔥",
+    "💜", "💙", "💚", "💛", "🩷", "🩵"
+  ],
+
+  hands: [
+    "🙏", "💪", "👏", "👍", "👎", "👌",
+    "✌️", "🤞", "🤝", "🙌", "🫶", "🤲",
+    "👋", "✊", "👊", "🤜", "🤛", "🖐️"
+  ],
+
+  animals: [
+    "🐈‍⬛", "🐈", "🐕", "🐺", "🦊", "🐼",
+    "🐻", "🐻‍❄️", "🦁", "🐯", "🐸", "🐵",
+    "🐰", "🦋", "🐍", "🦅", "🦉", "🐬"
+  ],
+
+  symbols: [
+    "🔥", "✨", "⭐", "🌟", "💫", "⚡",
+    "☀️", "🌙", "🌈", "💯", "❣️", "💢",
+    "✅", "❌", "💎", "🎉", "🎁", "👑"
+  ]
+};
+
+const oinanceEmojiGrid =
+  document.getElementById("standardEmojiGrid");
+
+const oinanceEmojiTabs =
+  document.querySelectorAll(".emoji-tab");
+
+// Display a category of individual emojis
+function showOinanceEmojiCategory(category) {
+  if (!oinanceEmojiGrid) return;
+
+  const emojis = oinanceEmojiCategories[category];
+
+  if (!emojis) return;
+
+  oinanceEmojiGrid.replaceChildren();
+
+  emojis.forEach(emoji => {
+    const button = document.createElement("button");
+
+    button.type = "button";
+    button.className = "standard-emoji";
+    button.textContent = emoji;
+    button.dataset.emoji = emoji;
+    button.setAttribute("aria-label", emoji);
+
+    oinanceEmojiGrid.appendChild(button);
+  });
+
+  oinanceEmojiTabs.forEach(tab => {
+    tab.classList.toggle(
+      "active",
+      tab.dataset.emojiCategory === category
+    );
+  });
+}
+
+// Switch emoji categories
+oinanceEmojiTabs.forEach(tab => {
+  tab.addEventListener("click", () => {
+    showOinanceEmojiCategory(tab.dataset.emojiCategory);
+  });
+});
+
+// Insert the selected emoji into the typing area
+if (oinanceEmojiGrid) {
+  oinanceEmojiGrid.addEventListener("click", event => {
+    const button = event.target.closest(".standard-emoji");
+
+    if (!button) return;
+
+    const emoji = button.dataset.emoji;
+
+    if (emoji) {
+      insertText(emoji);
+    }
+  });
+}
+
+// Load the smileys category when the keyboard starts
+showOinanceEmojiCategory("smileys");
