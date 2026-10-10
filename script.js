@@ -23,6 +23,8 @@ let activePanel = null;
 let calculatorValue = "";
 let spaceHoldTimer = null;
 let spaceLongPressTriggered = false;
+let voiceRecognition = null;
+let voiceIsListening = false;
 
 const clipboardHistory = [];
 
@@ -69,7 +71,10 @@ clearButton.addEventListener("click", () => {
 
 function updateLetterCase() {
   document.querySelectorAll(".key.letter").forEach(key => {
-    const letter = key.textContent.trim();
+    const letter = key.dataset.originalLetter ||
+      key.textContent.trim();
+
+    key.dataset.originalLetter = letter.toLowerCase();
 
     key.textContent = shiftOn
       ? letter.toUpperCase()
@@ -158,7 +163,6 @@ function openToolsMenu() {
 function closeToolsMenu() {
   featureToolbar.classList.add("hidden");
   featureToolbar.classList.remove("tools-visible");
-
   closeFeaturePanel();
 }
 
@@ -174,7 +178,6 @@ spaceButton.addEventListener("pointerdown", event => {
   if (event.button !== undefined && event.button !== 0) return;
 
   spaceLongPressTriggered = false;
-
   clearTimeout(spaceHoldTimer);
 
   spaceHoldTimer = setTimeout(() => {
@@ -214,13 +217,9 @@ const panels = document.querySelectorAll(".panel-content");
 function closeFeaturePanel() {
   featurePanel.classList.remove("open");
 
-  panels.forEach(panel => {
-    panel.classList.remove("active");
-  });
+  panels.forEach(panel => panel.classList.remove("active"));
 
-  toolButtons.forEach(button => {
-    button.classList.remove("active");
-  });
+  toolButtons.forEach(button => button.classList.remove("active"));
 
   emojiButton.classList.remove("active");
 
@@ -238,11 +237,7 @@ function openFeaturePanel(panelId, selectedButton = null) {
   }
 
   panels.forEach(panel => panel.classList.remove("active"));
-
-  toolButtons.forEach(button => {
-    button.classList.remove("active");
-  });
-
+  toolButtons.forEach(button => button.classList.remove("active"));
   emojiButton.classList.remove("active");
 
   selectedPanel.classList.add("active");
@@ -277,9 +272,66 @@ emojiButton.addEventListener("click", () => {
 
 // ============================================
 // OINANCE VOICE TYPING
+// Prevent duplicate sessions and repeated results
 // ============================================
 
+function cleanVoiceTranscript(text) {
+  let result = String(text || "").trim();
+
+  // Remove immediately repeated words:
+  // "how are you how are you" -> "how are you"
+  const words = result.split(/\s+/);
+  const cleanedWords = [];
+
+  for (let i = 0; i < words.length;) {
+    let duplicateLength = 0;
+
+    // Look for repeated sequences of up to 6 words.
+    for (let size = Math.min(6, Math.floor((words.length - i) / 2));
+         size >= 1;
+         size--) {
+      const first = words.slice(i, i + size);
+      const second = words.slice(i + size, i + size * 2);
+
+      const same = first.every((word, index) =>
+        word.toLowerCase().replace(/[.,!?;:]+$/, "") ===
+        second[index].toLowerCase().replace(/[.,!?;:]+$/, "")
+      );
+
+      if (same) {
+        duplicateLength = size;
+        break;
+      }
+    }
+
+    if (duplicateLength > 0) {
+      cleanedWords.push(...words.slice(i, i + duplicateLength));
+      i += duplicateLength * 2;
+
+      // Skip additional copies of the same sequence.
+      while (
+        i + duplicateLength <= words.length &&
+        words.slice(i, i + duplicateLength).every((word, index) =>
+          word.toLowerCase().replace(/[.,!?;:]+$/, "") ===
+          cleanedWords[cleanedWords.length - duplicateLength + index]
+            .toLowerCase().replace(/[.,!?;:]+$/, "")
+        )
+      ) {
+        i += duplicateLength;
+      }
+    } else {
+      cleanedWords.push(words[i]);
+      i++;
+    }
+  }
+
+  return cleanedWords.join(" ").trim();
+}
+
 voiceButton.addEventListener("click", () => {
+  // Don't start another recognition session while one is active.
+  if (voiceIsListening) return;
+
   const SpeechRecognition =
     window.SpeechRecognition ||
     window.webkitSpeechRecognition;
@@ -287,73 +339,96 @@ voiceButton.addEventListener("click", () => {
   if (!SpeechRecognition) {
     alert(
       "Voice typing is not supported by this browser. " +
-      "Please try another browser."
+      "Please try Google Chrome."
     );
     return;
   }
 
   if (!window.isSecureContext) {
     alert(
-      "Voice typing requires a secure connection. " +
-      "Please open OINANCE Keyboard using its HTTPS website."
+      "Voice typing requires a secure HTTPS connection."
     );
     return;
   }
 
-  const recognition = new SpeechRecognition();
+  let recognition;
+
+  try {
+    recognition = new SpeechRecognition();
+  } catch (error) {
+    alert("Could not prepare voice typing. Please try again.");
+    return;
+  }
+
+  voiceRecognition = recognition;
+  voiceIsListening = true;
+
+  let resultInserted = false;
 
   recognition.lang = "en-US";
   recognition.interimResults = false;
   recognition.maxAlternatives = 1;
+  recognition.continuous = false;
 
   voiceButton.classList.add("active");
   voiceButton.disabled = true;
+  voiceButton.setAttribute("aria-label", "Listening for speech");
 
   recognition.onstart = () => {
     console.log("OINANCE Voice: Listening...");
   };
 
-  recognition.onresult = (event) => {
-    const spokenText =
-      event.results[0][0].transcript;
+  recognition.onresult = event => {
+    // Insert only one final result per session.
+    if (resultInserted) return;
 
-    if (spokenText && spokenText.trim()) {
-      insertText(spokenText.trim() + " ");
+    let transcript = "";
+
+    for (let i = event.resultIndex; i < event.results.length; i++) {
+      if (event.results[i].isFinal) {
+        transcript += event.results[i][0].transcript + " ";
+      }
+    }
+
+    transcript = cleanVoiceTranscript(transcript);
+
+    if (transcript) {
+      resultInserted = true;
+      insertText(transcript + " ");
     }
   };
 
-  recognition.onerror = (event) => {
-    console.error(
-      "OINANCE Voice error:",
-      event.error
-    );
+  recognition.onerror = event => {
+    console.error("OINANCE Voice error:", event.error);
 
     const messages = {
       "not-allowed":
-        "Microphone access was denied. Please check your browser permissions.",
+        "Microphone access was denied. Check your browser permissions.",
       "service-not-allowed":
-        "Your browser's speech service is blocked or unavailable.",
+        "Your browser's speech service is unavailable or blocked.",
       "network":
-        "The speech service could not connect. Check your internet connection and try again.",
+        "Voice recognition could not connect. Check your internet connection.",
       "audio-capture":
         "No microphone is available. Check your phone's microphone.",
       "no-speech":
-        "I couldn't hear anything. Please speak clearly and try again.",
+        "No speech was detected. Please speak clearly and try again.",
       "language-not-supported":
-        "This speech service does not support the selected language."
+        "The speech service does not support this language."
     };
 
-    alert(
-      messages[event.error] ||
-      "Voice typing failed (" +
-      event.error +
-      "). Please try again."
-    );
+    if (event.error !== "no-speech") {
+      alert(messages[event.error] ||
+        "Voice typing failed: " + event.error);
+    }
   };
 
   recognition.onend = () => {
+    voiceIsListening = false;
+    voiceRecognition = null;
+
     voiceButton.classList.remove("active");
     voiceButton.disabled = false;
+    voiceButton.setAttribute("aria-label", "Voice typing");
   };
 
   try {
@@ -361,12 +436,14 @@ voiceButton.addEventListener("click", () => {
   } catch (error) {
     console.error("OINANCE Voice start error:", error);
 
+    voiceIsListening = false;
+    voiceRecognition = null;
+
     voiceButton.classList.remove("active");
     voiceButton.disabled = false;
+    voiceButton.setAttribute("aria-label", "Voice typing");
 
-    alert(
-      "Voice typing could not start. Please try again."
-    );
+    alert("Voice typing could not start. Please try again.");
   }
 });
 
@@ -390,7 +467,6 @@ document.querySelectorAll(".suggestion").forEach(button => {
 
 // ============================================
 // INDIVIDUAL EMOJIS
-// No picture collections
 // ============================================
 
 const oinanceEmojiCategories = {
@@ -464,17 +540,17 @@ emojiTabs.forEach(tab => {
   });
 });
 
-emojiGrid.addEventListener("click", event => {
-  const button = event.target.closest(".standard-emoji");
+if (emojiGrid) {
+  emojiGrid.addEventListener("click", event => {
+    const button = event.target.closest(".standard-emoji");
 
-  if (!button) return;
+    if (!button) return;
 
-  const emoji = button.dataset.emoji;
+    const emoji = button.dataset.emoji;
 
-  if (emoji) {
-    insertText(emoji);
-  }
-});
+    if (emoji) insertText(emoji);
+  });
+}
 
 
 // ============================================
@@ -516,7 +592,9 @@ const calculatorDisplay =
   document.getElementById("calculatorDisplay");
 
 function updateCalculatorDisplay(value) {
-  calculatorDisplay.textContent = value || "0";
+  if (calculatorDisplay) {
+    calculatorDisplay.textContent = value || "0";
+  }
 }
 
 function calculate(expression) {
@@ -561,10 +639,7 @@ function calculate(expression) {
   function multiplication() {
     let result = number();
 
-    while (
-      tokens[index] === "*" ||
-      tokens[index] === "/"
-    ) {
+    while (tokens[index] === "*" || tokens[index] === "/") {
       const operator = tokens[index++];
       const next = number();
 
@@ -579,10 +654,7 @@ function calculate(expression) {
   function addition() {
     let result = multiplication();
 
-    while (
-      tokens[index] === "+" ||
-      tokens[index] === "-"
-    ) {
+    while (tokens[index] === "+" || tokens[index] === "-") {
       const operator = tokens[index++];
       const next = multiplication();
 
@@ -611,19 +683,19 @@ document.querySelectorAll("[data-calc]").forEach(button => {
 });
 
 document.getElementById("calculatorClear")
-  .addEventListener("click", () => {
+  ?.addEventListener("click", () => {
     calculatorValue = "";
     updateCalculatorDisplay("0");
   });
 
 document.getElementById("calculatorBackspace")
-  .addEventListener("click", () => {
+  ?.addEventListener("click", () => {
     calculatorValue = calculatorValue.slice(0, -1);
     updateCalculatorDisplay(calculatorValue);
   });
 
 document.getElementById("calculatorEquals")
-  .addEventListener("click", () => {
+  ?.addEventListener("click", () => {
     try {
       const result = calculate(calculatorValue);
 
@@ -649,12 +721,12 @@ document.querySelectorAll("[data-ai]").forEach(button => {
 });
 
 document.getElementById("translateAction")
-  .addEventListener("click", () => {
+  ?.addEventListener("click", () => {
     alert("Translation will be connected in a future version.");
   });
 
 document.getElementById("globeButton")
-  .addEventListener("click", () => {
+  ?.addEventListener("click", () => {
     alert("Language switching will be added in a future version.");
   });
 
