@@ -1,4 +1,6 @@
-// OINANCE KEYBOARD — WORKING VERSION
+// ============================================
+// OINANCE KEYBOARD — MAIN JAVASCRIPT
+// ============================================
 
 const typedText = document.getElementById("typedText");
 const clearButton = document.getElementById("clearButton");
@@ -8,15 +10,27 @@ const numberKeyboard = document.getElementById("numberKeyboard");
 const numberButton = document.getElementById("numberButton");
 const letterButton = document.getElementById("letterButton");
 
+const spaceButton = document.getElementById("spaceButton");
+const emojiButton = document.getElementById("emojiButton");
+const voiceButton = document.getElementById("voiceButton");
+
 const featurePanel = document.getElementById("featurePanel");
+const featureToolbar = document.getElementById("featureToolbar");
 
 let typedValue = "";
 let shiftOn = true;
 let activePanel = null;
 let calculatorValue = "";
+let spaceHoldTimer = null;
+let spaceLongPressTriggered = false;
+
 const clipboardHistory = [];
 
-// TYPING AREA
+
+// ============================================
+// TEXT ENTRY
+// ============================================
+
 function updateText() {
   typedText.textContent = typedValue || "Start typing...";
   typedText.style.color = typedValue ? "#fff" : "#777";
@@ -32,7 +46,11 @@ function deleteCharacter() {
   updateText();
 }
 
+
+// ============================================
 // CLEAR TEXT AND SAVE TO CLIPBOARD
+// ============================================
+
 clearButton.addEventListener("click", () => {
   if (typedValue.trim()) {
     clipboardHistory.unshift(typedValue);
@@ -44,19 +62,29 @@ clearButton.addEventListener("click", () => {
   updateText();
 });
 
-// UPPERCASE AND LOWERCASE
+
+// ============================================
+// LETTER CASE
+// ============================================
+
 function updateLetterCase() {
   document.querySelectorAll(".key.letter").forEach(key => {
+    const letter = key.textContent.trim();
+
     key.textContent = shiftOn
-      ? key.textContent.toUpperCase()
-      : key.textContent.toLowerCase();
+      ? letter.toUpperCase()
+      : letter.toLowerCase();
   });
 
   document.getElementById("shiftButton")
     ?.classList.toggle("shift-active", shiftOn);
 }
 
+
+// ============================================
 // SWITCH BETWEEN LETTERS AND NUMBERS
+// ============================================
+
 numberButton.addEventListener("click", () => {
   letterKeyboard.classList.add("hidden");
   numberKeyboard.classList.remove("hidden");
@@ -73,12 +101,17 @@ letterButton.addEventListener("click", () => {
   numberButton.classList.remove("hidden");
 });
 
-// KEYBOARD BUTTONS
+
+// ============================================
+// MAIN KEYBOARD INPUT
+// ============================================
+
 document.addEventListener("click", event => {
   const key = event.target.closest(".key");
+
   if (!key) return;
 
-  const value = key.textContent.trim();
+  const value = key.dataset.character || key.textContent.trim();
 
   if (value === "⇧") {
     shiftOn = !shiftOn;
@@ -88,11 +121,6 @@ document.addEventListener("click", event => {
 
   if (value === "⌫") {
     deleteCharacter();
-    return;
-  }
-
-  if (value.toLowerCase() === "space") {
-    insertText(" ");
     return;
   }
 
@@ -115,52 +143,189 @@ document.addEventListener("click", event => {
   }
 });
 
-// SPACE AND ENTER
-document.getElementById("spaceButton")
-  .addEventListener("click", () => insertText(" "));
 
-document.getElementById("enterButton")
-  .addEventListener("click", () => insertText("\n"));
+// ============================================
+// SPACE BAR
+// Tap = space
+// Hold = open tools
+// ============================================
 
+function openToolsMenu() {
+  featureToolbar.classList.remove("hidden");
+  featureToolbar.classList.add("tools-visible");
+}
+
+function closeToolsMenu() {
+  featureToolbar.classList.add("hidden");
+  featureToolbar.classList.remove("tools-visible");
+
+  closeFeaturePanel();
+}
+
+function toggleToolsMenu() {
+  if (featureToolbar.classList.contains("hidden")) {
+    openToolsMenu();
+  } else {
+    closeToolsMenu();
+  }
+}
+
+spaceButton.addEventListener("pointerdown", event => {
+  if (event.button !== undefined && event.button !== 0) return;
+
+  spaceLongPressTriggered = false;
+
+  clearTimeout(spaceHoldTimer);
+
+  spaceHoldTimer = setTimeout(() => {
+    spaceLongPressTriggered = true;
+    toggleToolsMenu();
+  }, 550);
+});
+
+function cancelSpaceHold() {
+  clearTimeout(spaceHoldTimer);
+  spaceHoldTimer = null;
+}
+
+spaceButton.addEventListener("pointerup", cancelSpaceHold);
+spaceButton.addEventListener("pointerleave", cancelSpaceHold);
+spaceButton.addEventListener("pointercancel", cancelSpaceHold);
+
+spaceButton.addEventListener("click", event => {
+  event.preventDefault();
+
+  if (spaceLongPressTriggered) {
+    spaceLongPressTriggered = false;
+    return;
+  }
+
+  insertText(" ");
+});
+
+
+// ============================================
 // OPEN AND CLOSE FEATURE PANELS
+// ============================================
+
 const toolButtons = document.querySelectorAll(".tool-button");
 const panels = document.querySelectorAll(".panel-content");
+
+function closeFeaturePanel() {
+  featurePanel.classList.remove("open");
+
+  panels.forEach(panel => {
+    panel.classList.remove("active");
+  });
+
+  toolButtons.forEach(button => {
+    button.classList.remove("active");
+  });
+
+  emojiButton.classList.remove("active");
+
+  activePanel = null;
+}
+
+function openFeaturePanel(panelId, selectedButton = null) {
+  const selectedPanel = document.getElementById(panelId);
+
+  if (!selectedPanel) return;
+
+  if (activePanel === panelId) {
+    closeFeaturePanel();
+    return;
+  }
+
+  panels.forEach(panel => panel.classList.remove("active"));
+
+  toolButtons.forEach(button => {
+    button.classList.remove("active");
+  });
+
+  emojiButton.classList.remove("active");
+
+  selectedPanel.classList.add("active");
+  featurePanel.classList.add("open");
+
+  if (selectedButton) {
+    selectedButton.classList.add("active");
+  }
+
+  activePanel = panelId;
+}
 
 toolButtons.forEach(button => {
   button.addEventListener("click", () => {
     const panelId = button.dataset.panel;
 
-    if (!panelId) {
-      alert("Voice typing will be added in a later version.");
-      return;
+    if (panelId) {
+      openFeaturePanel(panelId, button);
     }
-
-    if (activePanel === panelId) {
-      featurePanel.classList.remove("open");
-
-      panels.forEach(panel => panel.classList.remove("active"));
-      toolButtons.forEach(item => item.classList.remove("active"));
-
-      activePanel = null;
-      return;
-    }
-
-    panels.forEach(panel => panel.classList.remove("active"));
-    toolButtons.forEach(item => item.classList.remove("active"));
-
-    const selectedPanel = document.getElementById(panelId);
-
-    if (!selectedPanel) return;
-
-    selectedPanel.classList.add("active");
-    button.classList.add("active");
-    featurePanel.classList.add("open");
-
-    activePanel = panelId;
   });
 });
 
-// SUGGESTIONS
+
+// ============================================
+// PERMANENT EMOJI BUTTON
+// ============================================
+
+emojiButton.addEventListener("click", () => {
+  openFeaturePanel("emojiPanel", emojiButton);
+});
+
+
+// ============================================
+// VOICE BUTTON
+// ============================================
+
+voiceButton.addEventListener("click", () => {
+  if (!("SpeechRecognition" in window) &&
+      !("webkitSpeechRecognition" in window)) {
+    alert(
+      "Voice typing is not supported by this browser. " +
+      "We will add more voice support in a future version."
+    );
+    return;
+  }
+
+  const SpeechRecognition =
+    window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  const recognition = new SpeechRecognition();
+
+  recognition.lang = "en-NG";
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+
+  voiceButton.classList.add("active");
+
+  recognition.onresult = event => {
+    const spokenText = event.results[0][0].transcript;
+    insertText(spokenText + " ");
+  };
+
+  recognition.onerror = () => {
+    alert("Voice recognition could not start. Please try again.");
+  };
+
+  recognition.onend = () => {
+    voiceButton.classList.remove("active");
+  };
+
+  try {
+    recognition.start();
+  } catch (error) {
+    voiceButton.classList.remove("active");
+    alert("Please try voice typing again.");
+  }
+});
+
+
+// ============================================
+// WORD SUGGESTIONS
+// ============================================
+
 document.querySelectorAll(".suggestion").forEach(button => {
   button.addEventListener("click", () => {
     const word = button.textContent.trim();
@@ -173,44 +338,103 @@ document.querySelectorAll(".suggestion").forEach(button => {
   });
 });
 
-// EMOJI DESIGN COLLECTIONS
-document.querySelectorAll(".emoji-collection").forEach(button => {
-  button.addEventListener("click", () => {
-    const image = button.querySelector("img");
-    const preview = document.getElementById("emojiPreview");
-    const status = document.getElementById("emojiStatus");
 
-    if (!image || !preview) return;
+// ============================================
+// INDIVIDUAL EMOJIS
+// No picture collections
+// ============================================
 
-    preview.replaceChildren();
+const oinanceEmojiCategories = {
+  smileys: [
+    "😀", "😃", "😄", "😁", "😂", "🤣",
+    "🥰", "😍", "😘", "😎", "😭", "😴",
+    "😊", "😉", "🤗", "🥹", "😇", "🤔",
+    "😢", "😡", "🥳", "🤩", "😋", "🙃"
+  ],
 
-    const fullImage = document.createElement("img");
-    fullImage.src = image.getAttribute("src");
-    fullImage.alt = image.alt;
+  hearts: [
+    "❤️", "🖤", "🤍", "💖", "💗", "💓",
+    "💕", "💞", "💘", "💝", "💔", "❤️‍🔥",
+    "💜", "💙", "💚", "💛", "🩷", "🩵"
+  ],
 
-    fullImage.onload = () => {
-      preview.classList.remove("hidden");
-      if (status) {
-        status.textContent = "Collection selected successfully.";
-      }
-    };
+  hands: [
+    "🙏", "💪", "👏", "👍", "👎", "👌",
+    "✌️", "🤞", "🤝", "🙌", "🫶", "🤲",
+    "👋", "✊", "👊", "🤜", "🤛", "🖐️"
+  ],
 
-    fullImage.onerror = () => {
-      preview.classList.add("hidden");
+  animals: [
+    "🐈‍⬛", "🐈", "🐕", "🐺", "🦊", "🐼",
+    "🐻", "🐻‍❄️", "🦁", "🐯", "🐸", "🐵",
+    "🐰", "🦋", "🐍", "🦅", "🦉", "🐬"
+  ],
 
-      if (status) {
-        status.textContent =
-          "Image not found. Please check the image filename in GitHub.";
-      }
-    };
+  symbols: [
+    "🔥", "✨", "⭐", "🌟", "💫", "⚡",
+    "☀️", "🌙", "🌈", "💯", "❣️", "💢",
+    "✅", "❌", "💎", "🎉", "🎁", "👑"
+  ]
+};
 
-    preview.appendChild(fullImage);
+const emojiGrid = document.getElementById("standardEmojiGrid");
+const emojiTabs = document.querySelectorAll(".emoji-tab");
+
+function showEmojiCategory(category) {
+  if (!emojiGrid) return;
+
+  const emojis = oinanceEmojiCategories[category];
+
+  if (!emojis) return;
+
+  emojiGrid.replaceChildren();
+
+  emojis.forEach(emoji => {
+    const button = document.createElement("button");
+
+    button.type = "button";
+    button.className = "standard-emoji";
+    button.textContent = emoji;
+    button.dataset.emoji = emoji;
+    button.setAttribute("aria-label", emoji);
+
+    emojiGrid.appendChild(button);
+  });
+
+  emojiTabs.forEach(tab => {
+    tab.classList.toggle(
+      "active",
+      tab.dataset.emojiCategory === category
+    );
+  });
+}
+
+emojiTabs.forEach(tab => {
+  tab.addEventListener("click", () => {
+    showEmojiCategory(tab.dataset.emojiCategory);
   });
 });
 
+emojiGrid.addEventListener("click", event => {
+  const button = event.target.closest(".standard-emoji");
+
+  if (!button) return;
+
+  const emoji = button.dataset.emoji;
+
+  if (emoji) {
+    insertText(emoji);
+  }
+});
+
+
+// ============================================
 // CLIPBOARD
+// ============================================
+
 function renderClipboard() {
   const box = document.getElementById("clipboardItems");
+
   if (!box) return;
 
   box.replaceChildren();
@@ -234,7 +458,11 @@ function renderClipboard() {
   });
 }
 
+
+// ============================================
 // CALCULATOR
+// ============================================
+
 const calculatorDisplay =
   document.getElementById("calculatorDisplay");
 
@@ -358,121 +586,36 @@ document.getElementById("calculatorEquals")
     }
   });
 
-// PLACEHOLDERS FOR FEATURES NOT CONNECTED YET
+
+// ============================================
+// FEATURE PLACEHOLDERS
+// ============================================
+
 document.querySelectorAll("[data-ai]").forEach(button => {
   button.addEventListener("click", () => {
-    alert("The AI assistant will be connected in a later version.");
+    alert(
+      "The AI writing assistant will be connected in a future version."
+    );
   });
 });
 
 document.getElementById("translateAction")
   .addEventListener("click", () => {
-    alert("Translation will be connected in a later version.");
+    alert("Translation will be connected in a future version.");
   });
 
 document.getElementById("globeButton")
   .addEventListener("click", () => {
-    alert("Language switching will be added later.");
+    alert("Language switching will be added in a future version.");
   });
 
+
+// ============================================
 // STARTUP
+// ============================================
+
 updateLetterCase();
 updateText();
 renderClipboard();
 updateCalculatorDisplay("0");
-
-// OINANCE INDIVIDUAL EMOJI SYSTEM 🖤🐈‍⬛
-
-const oinanceEmojiCategories = {
-  smileys: [
-    "😀", "😃", "😄", "😁", "😂", "🤣",
-    "🥰", "😍", "😘", "😎", "😭", "😴",
-    "😊", "😉", "🤗", "🥹", "😇", "🤔",
-    "😢", "😡", "🥳", "🤩", "😋", "🙃"
-  ],
-
-  hearts: [
-    "❤️", "🖤", "🤍", "💖", "💗", "💓",
-    "💕", "💞", "💘", "💝", "💔", "❤️‍🔥",
-    "💜", "💙", "💚", "💛", "🩷", "🩵"
-  ],
-
-  hands: [
-    "🙏", "💪", "👏", "👍", "👎", "👌",
-    "✌️", "🤞", "🤝", "🙌", "🫶", "🤲",
-    "👋", "✊", "👊", "🤜", "🤛", "🖐️"
-  ],
-
-  animals: [
-    "🐈‍⬛", "🐈", "🐕", "🐺", "🦊", "🐼",
-    "🐻", "🐻‍❄️", "🦁", "🐯", "🐸", "🐵",
-    "🐰", "🦋", "🐍", "🦅", "🦉", "🐬"
-  ],
-
-  symbols: [
-    "🔥", "✨", "⭐", "🌟", "💫", "⚡",
-    "☀️", "🌙", "🌈", "💯", "❣️", "💢",
-    "✅", "❌", "💎", "🎉", "🎁", "👑"
-  ]
-};
-
-const oinanceEmojiGrid =
-  document.getElementById("standardEmojiGrid");
-
-const oinanceEmojiTabs =
-  document.querySelectorAll(".emoji-tab");
-
-// Display a category of individual emojis
-function showOinanceEmojiCategory(category) {
-  if (!oinanceEmojiGrid) return;
-
-  const emojis = oinanceEmojiCategories[category];
-
-  if (!emojis) return;
-
-  oinanceEmojiGrid.replaceChildren();
-
-  emojis.forEach(emoji => {
-    const button = document.createElement("button");
-
-    button.type = "button";
-    button.className = "standard-emoji";
-    button.textContent = emoji;
-    button.dataset.emoji = emoji;
-    button.setAttribute("aria-label", emoji);
-
-    oinanceEmojiGrid.appendChild(button);
-  });
-
-  oinanceEmojiTabs.forEach(tab => {
-    tab.classList.toggle(
-      "active",
-      tab.dataset.emojiCategory === category
-    );
-  });
-}
-
-// Switch emoji categories
-oinanceEmojiTabs.forEach(tab => {
-  tab.addEventListener("click", () => {
-    showOinanceEmojiCategory(tab.dataset.emojiCategory);
-  });
-});
-
-// Insert the selected emoji into the typing area
-if (oinanceEmojiGrid) {
-  oinanceEmojiGrid.addEventListener("click", event => {
-    const button = event.target.closest(".standard-emoji");
-
-    if (!button) return;
-
-    const emoji = button.dataset.emoji;
-
-    if (emoji) {
-      insertText(emoji);
-    }
-  });
-}
-
-// Load the smileys category when the keyboard starts
-showOinanceEmojiCategory("smileys");
+showEmojiCategory("smileys");
