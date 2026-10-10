@@ -1,6 +1,6 @@
-/* ========================================
-   RESET AND BASE
-======================================== */
+/* =========================================
+   OINANCE KEYBOARD — PREMIUM DARK DESIGN
+========================================= */
 
 * {
   box-sizing: border-box;
@@ -32,11 +32,6 @@ button {
   -webkit-user-select: none;
 }
 
-
-/* ========================================
-   MAIN APP
-======================================== */
-
 .keyboard-app {
   width: 100%;
   max-width: 520px;
@@ -48,17 +43,16 @@ button {
   background: #0b0b0b;
 }
 
-
-/* ========================================
-   TYPING AREA
-======================================== */
+/* =========================================
+   TEXT PREVIEW
+========================================= */
 
 .typing-section {
   margin: 10px 10px 0;
-  min-height: 95px;
+  min-height: 105px;
   padding: 12px 14px;
   background: #111;
-  border: 1px solid #252525;
+  border: 1px solid #292929;
   border-radius: 15px;
   box-shadow: inset 0 1px 0 #202020;
 }
@@ -71,28 +65,28 @@ button {
 }
 
 .typing-label {
-  color: #777;
-  font-size: 9px;
+  color: #aaa;
+  font-size: 10px;
   font-weight: 700;
   letter-spacing: 1.5px;
 }
 
 .clear-button {
-  padding: 5px 8px;
-  border: 1px solid #252525;
-  border-radius: 7px;
-  background: #181818;
-  color: #999;
+  padding: 6px 10px;
+  border: 1px solid #333;
+  border-radius: 8px;
+  background: #191919;
+  color: #bbb;
   font-size: 11px;
 }
 
 .clear-button:active {
-  background: #303030;
+  background: #333;
   color: #fff;
 }
 
 .typed-text {
-  min-height: 43px;
+  min-height: 48px;
   color: #777;
   font-size: 18px;
   line-height: 1.5;
@@ -100,10 +94,9 @@ button {
   overflow-wrap: anywhere;
 }
 
-
-/* ========================================
-   SUGGESTION BAR
-======================================== */
+/* =========================================
+   WORD SUGGESTIONS
+========================================= */
 
 .suggestion-bar {
   display: flex;
@@ -121,10 +114,10 @@ button {
 
 .suggestion {
   flex: 1;
-  min-width: 62px;
-  height: 33px;
+  min-width: 55px;
+  height: 34px;
   padding: 0 8px;
-  border: 1px solid #202020;
+  border: 1px solid #252525;
   border-radius: 9px;
   background: #151515;
   color: #bbb;
@@ -133,19 +126,18 @@ button {
 }
 
 .suggestion:active {
-  background: #303030;
+  background: #333;
   color: #fff;
 }
 
-
-/* ========================================
-   FEATURE TOOLBAR
-======================================== */
+/* =========================================
+   HIDDEN EXTRA TOOLS
+========================================= */
 
 .feature-toolbar {
   display: flex;
   gap: 7px;
-  padding: 8px 9px;
+  padding: 9px;
   overflow-x: auto;
   scrollbar-width: none;
   background: #080808;
@@ -156,62 +148,57 @@ button {
   display: none;
 }
 
+.feature-toolbar.hidden {
+  display: none !important;
+}
+
 .tool-button {
-  flex: 0 0 57px;
-  height: 49px;
+  flex: 0 0 66px;
+  min-height: 49px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 4px;
-  border: 1px solid #252525;
+  border: 1px solid #292929;
   border-radius: 11px;
-  background: #131313;
-  color: #ddd;
-  transition:
-    background 0.15s ease,
-    transform 0.12s ease,
-    border-color 0.15s ease;
+  background: #151515;
+  color: #eee;
 }
 
 .tool-button span {
-  font-size: 17px;
+  font-size: 18px;
   line-height: 1;
 }
 
 .tool-button small {
-  color: #888;
+  color: #aaa;
   font-size: 9px;
+  white-space: nowrap;
 }
 
-.tool-button.active {
-  background: #292929;
-  border-color: #555;
-}
-
+.tool-button.active,
 .tool-button:active {
-  transform: scale(0.95);
+  background: #333;
+  border-color: #777;
 }
 
-
-/* ========================================
-   FEATURE PANEL
-======================================== */
+/* =========================================
+   FEATURE PANELS
+========================================= */
 
 .feature-panel {
   max-height: 0;
   overflow: hidden;
   background: #0d0d0d;
   border-bottom: 1px solid transparent;
-  transition:
-    max-height 0.25s ease,
-    border-color 0.2s ease;
+  transition: max-height 0.25s ease;
 }
 
 .feature-panel.open {
-  max-height: 340px;
+  max-height: 330px;
   overflow-y: auto;
-  border-bottom-color: #242424;
+  border-bottom-color: #292929;
 }
 
 .panel-content {
@@ -225,22 +212,21 @@ button {
 
 .panel-title {
   margin-bottom: 11px;
-  color: #eee;
-  font-size: 13px;
+  color: #fff;
+  font-size: 14px;
   font-weight: 700;
 }
 
 .panel-note {
   margin-top: 10px;
-  color: #777;
+  color: #999;
   font-size: 11px;
   line-height: 1.5;
 }
 
-
-/* ========================================
-   AI PANEL
-======================================== */
+/* =========================================
+   AI WRITING
+========================================= */
 
 .ai-actions {
   display: grid;
@@ -249,23 +235,21 @@ button {
 }
 
 .ai-actions button {
-  min-height: 39px;
-  border: 1px solid #292929;
+  min-height: 42px;
+  border: 1px solid #303030;
   border-radius: 9px;
-  background: #181818;
-  color: #ccc;
+  background: #191919;
+  color: #ddd;
   font-size: 12px;
 }
 
 .ai-actions button:active {
-  background: #333;
-  color: #fff;
+  background: #383838;
 }
 
-
-/* ========================================
-   TRANSLATION PANEL
-======================================== */
+/* =========================================
+   TRANSLATION
+========================================= */
 
 .translation-row {
   display: flex;
@@ -275,105 +259,95 @@ button {
 .translation-row select {
   flex: 1;
   min-width: 0;
-  height: 41px;
+  height: 42px;
   padding: 0 9px;
-  border: 1px solid #292929;
+  border: 1px solid #303030;
   border-radius: 9px;
   background: #181818;
-  color: #ddd;
+  color: #eee;
 }
 
 .translation-row button {
-  min-height: 41px;
+  min-height: 42px;
   padding: 0 14px;
   border: 1px solid #eee;
   border-radius: 9px;
   background: #eee;
   color: #000;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
 }
 
-
-/* ========================================
-   CUSTOM EMOJI COLLECTIONS
-======================================== */
+/* =========================================
+   INDIVIDUAL EMOJI PANEL
+========================================= */
 
 .emoji-description {
-  margin-top: -4px;
-  margin-bottom: 12px;
-  color: #777;
-  font-size: 11px;
+  margin-bottom: 10px;
+  color: #aaa;
+  font-size: 12px;
   line-height: 1.5;
 }
 
-.emoji-collections {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 9px;
-}
-
-.emoji-collection {
-  min-width: 0;
-  overflow: hidden;
+.emoji-tabs {
+  display: flex;
+  justify-content: space-around;
+  gap: 5px;
+  margin: 10px 0;
   padding: 6px;
+  background: #151515;
   border: 1px solid #292929;
   border-radius: 12px;
-  background: #151515;
-  color: #ccc;
-  transition:
-    border-color 0.15s ease,
-    background 0.15s ease;
 }
 
-.emoji-collection:active {
-  background: #292929;
-  border-color: #666;
+.emoji-tab {
+  min-width: 40px;
+  min-height: 40px;
+  padding: 5px;
+  border: none;
+  border-radius: 9px;
+  background: transparent;
+  color: #fff;
+  font-size: 23px;
 }
 
-.emoji-collection img {
-  display: block;
-  width: 100%;
-  height: 90px;
-  object-fit: contain;
-  border-radius: 7px;
-  background: #050505;
+.emoji-tab.active {
+  background: #333;
+  box-shadow: 0 0 0 1px #666;
 }
 
-.emoji-collection span {
-  display: block;
-  margin-top: 7px;
-  font-size: 10px;
-  line-height: 1.4;
-}
-
-.emoji-status {
-  margin-top: 12px;
-  color: #777;
-  font-size: 11px;
-  line-height: 1.5;
-}
-
-.emoji-preview {
-  margin-top: 10px;
-  padding: 8px;
+.standard-emoji-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 7px;
+  padding: 9px;
+  margin-bottom: 8px;
+  background: #101010;
   border: 1px solid #292929;
-  border-radius: 10px;
-  background: #050505;
+  border-radius: 13px;
 }
 
-.emoji-preview img {
-  display: block;
-  width: 100%;
-  max-height: 220px;
-  object-fit: contain;
-  border-radius: 6px;
+.standard-emoji {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 0;
+  min-height: 44px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: #202020;
+  color: #fff;
+  font-size: 25px;
 }
 
+.standard-emoji:active {
+  background: #444;
+  transform: scale(0.94);
+}
 
-/* ========================================
+/* =========================================
    CALCULATOR
-======================================== */
+========================================= */
 
 .calculator-display {
   min-height: 47px;
@@ -397,11 +371,11 @@ button {
 
 .calculator-grid button {
   min-width: 0;
-  height: 37px;
-  border: 1px solid #292929;
+  height: 39px;
+  border: 1px solid #303030;
   border-radius: 8px;
   background: #191919;
-  color: #ddd;
+  color: #eee;
   font-size: 14px;
 }
 
@@ -409,25 +383,16 @@ button {
   background: #383838;
 }
 
-.calculator-grid #calculatorBackspace {
-  color: #bbb;
-}
-
 .calculator-grid .equals {
   grid-column: span 3;
-  background: #dedede;
+  background: #eee;
   color: #000;
   font-weight: 700;
 }
 
-.calculator-grid .equals:active {
-  background: #fff;
-}
-
-
-/* ========================================
-   MONEY PANEL
-======================================== */
+/* =========================================
+   MONEY TOOLS
+========================================= */
 
 .money-grid {
   display: grid;
@@ -436,37 +401,47 @@ button {
 }
 
 .money-grid button {
-  min-height: 40px;
-  border: 1px solid #292929;
+  min-height: 42px;
+  border: 1px solid #303030;
   border-radius: 9px;
-  background: #181818;
-  color: #ccc;
+  background: #191919;
+  color: #ddd;
   font-size: 12px;
 }
 
 .money-grid button:active {
-  background: #333;
+  background: #383838;
 }
 
-
-/* ========================================
+/* =========================================
    CLIPBOARD
-======================================== */
+========================================= */
 
 .clipboard-items {
-  padding: 16px 12px;
-  border: 1px dashed #303030;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 12px;
+  border: 1px dashed #383838;
   border-radius: 10px;
-  color: #777;
-  text-align: center;
-  font-size: 11px;
+  color: #aaa;
+  font-size: 12px;
   line-height: 1.6;
 }
 
+.clipboard-items button {
+  padding: 9px;
+  border: 1px solid #303030;
+  border-radius: 8px;
+  background: #191919;
+  color: #eee;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
 
-/* ========================================
-   KEYBOARD AREA
-======================================== */
+/* =========================================
+   KEYBOARD
+========================================= */
 
 .keyboard {
   margin-top: auto;
@@ -475,15 +450,10 @@ button {
   border-top: 1px solid #202020;
 }
 
-
-/* ========================================
-   KEY ROWS
-======================================== */
-
 .key-row {
   display: flex;
   justify-content: center;
-  gap: 5px;
+  gap: 4px;
   margin-bottom: 8px;
 }
 
@@ -492,11 +462,6 @@ button {
   padding-left: 4%;
 }
 
-
-/* ========================================
-   LETTER AND SYMBOL KEYS
-======================================== */
-
 .key {
   flex: 1;
   min-width: 0;
@@ -504,93 +469,112 @@ button {
   border: 1px solid #303030;
   border-radius: 8px;
   background: linear-gradient(#292929, #202020);
-  color: #f2f2f2;
-  font-size: 17px;
+  color: #f5f5f5;
+  font-size: 16px;
   font-weight: 500;
-  box-shadow:
-    0 2px 0 #000,
-    inset 0 1px 0 #383838;
-  transition:
-    transform 0.07s ease,
-    background 0.07s ease;
+  box-shadow: 0 2px 0 #000, inset 0 1px 0 #383838;
+  transition: transform 0.07s ease, background 0.07s ease;
 }
 
 .key:active {
   transform: translateY(2px);
   background: #414141;
-  box-shadow: inset 0 1px 0 #505050;
 }
 
 .special-key {
-  flex: 1.35;
-  max-width: 48px;
+  flex: 1.2;
+  max-width: 43px;
   background: linear-gradient(#222, #181818);
   color: #bbb;
   font-size: 17px;
 }
 
+.punctuation-key {
+  max-width: 35px;
+  color: #ddd;
+  font-size: 18px;
+}
 
-/* ========================================
-   BOTTOM ROW
-======================================== */
+/* =========================================
+   PERMANENT BOTTOM ROW
+========================================= */
 
 .bottom-row {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
+  margin-top: 1px;
 }
 
 .bottom-key {
-  flex: 0 0 48px;
+  flex: 0 0 40px;
+  min-width: 0;
   height: 44px;
-  border: 1px solid #292929;
-  border-radius: 8px;
+  padding: 0 3px;
+  border: 1px solid #303030;
+  border-radius: 9px;
   background: #191919;
-  color: #bbb;
-  font-size: 12px;
-  font-weight: 600;
-  box-shadow:
-    0 2px 0 #000,
-    inset 0 1px 0 #292929;
+  color: #eee;
+  font-size: 16px;
+  box-shadow: 0 2px 0 #000, inset 0 1px 0 #292929;
 }
 
 .bottom-key:active {
   transform: translateY(2px);
-  background: #353535;
+  background: #383838;
+}
+
+.bottom-key.active {
+  background: #383838;
+  border-color: #777;
 }
 
 .space-key {
   flex: 1;
   min-width: 0;
   height: 44px;
-  border: 1px solid #292929;
-  border-radius: 8px;
-  background: #202020;
-  color: #888;
-  font-size: 12px;
-  letter-spacing: 1px;
-  box-shadow:
-    0 2px 0 #000,
-    inset 0 1px 0 #303030;
+  padding: 0 3px;
+  border: 1px solid #333;
+  border-radius: 9px;
+  background: #222;
+  color: #bbb;
+  font-size: 10px;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+  overflow: hidden;
+  box-shadow: 0 2px 0 #000, inset 0 1px 0 #303030;
+  touch-action: manipulation;
 }
 
 .space-key:active {
   background: #383838;
 }
 
+/* =========================================
+   FOOTER
+========================================= */
 
-/* ========================================
+.app-footer {
+  padding: 9px;
+  background: #080808;
+  color: #666;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-align: center;
+}
+
+/* =========================================
    HIDDEN ELEMENTS
-======================================== */
+========================================= */
 
 .hidden {
   display: none !important;
 }
 
-
-/* ========================================
-   PHONE SIZING
-======================================== */
+/* =========================================
+   SMALL PHONE SUPPORT
+========================================= */
 
 @media (max-width: 380px) {
   .typing-section {
@@ -599,36 +583,47 @@ button {
   }
 
   .key-row {
-    gap: 4px;
+    gap: 3px;
     margin-bottom: 7px;
   }
 
   .key {
-    height: 44px;
+    height: 43px;
     border-radius: 7px;
-    font-size: 15px;
+    font-size: 14px;
   }
 
   .special-key {
-    max-width: 42px;
+    max-width: 37px;
+  }
+
+  .punctuation-key {
+    max-width: 29px;
+    font-size: 16px;
+  }
+
+  .bottom-row {
+    gap: 4px;
   }
 
   .bottom-key {
-    flex-basis: 42px;
+    flex-basis: 34px;
     height: 41px;
+    font-size: 14px;
   }
 
   .space-key {
     height: 41px;
+    font-size: 9px;
   }
 
-  .tool-button {
-    flex-basis: 53px;
-    height: 46px;
+  .standard-emoji-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
   }
 
-  .emoji-collection img {
-    height: 75px;
+  .emoji-tab {
+    min-width: 35px;
+    font-size: 21px;
   }
 }
 
@@ -639,104 +634,6 @@ button {
   }
 
   .key {
-    height: 54px;
+    height: 53px;
   }
-}
-
-/* OINANCE Individual Emoji Keyboard */
-.emoji-tabs {
-  display: flex;
-  justify-content: space-around;
-  gap: 8px;
-  margin: 14px 0;
-  padding: 8px;
-  background: #151515;
-  border-radius: 14px;
-}
-
-.emoji-tab {
-  border: none;
-  background: transparent;
-  color: #ffffff;
-  font-size: 24px;
-  padding: 8px;
-  border-radius: 10px;
-  cursor: pointer;
-}
-
-.emoji-tab.active {
-  background: #333333;
-  box-shadow: 0 0 0 1px #666666;
-}
-
-.standard-emoji-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 8px;
-  padding: 12px;
-  margin-bottom: 22px;
-  background: #101010;
-  border: 1px solid #292929;
-  border-radius: 16px;
-}
-
-.standard-emoji {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-width: 0;
-  min-height: 52px;
-  border: none;
-  border-radius: 12px;
-  background: #202020;
-  color: #ffffff;
-  font-size: 29px;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-  transition: background 0.15s ease, transform 0.15s ease;
-}
-
-.standard-emoji:active {
-  background: #404040;
-  transform: scale(0.92);
-}
-
-.emoji-description {
-  color: #aaaaaa;
-  font-size: 13px;
-  line-height: 1.5;
-}
-
-#emojiPanel .panel-title {
-  margin-top: 16px;
-  color: #ffffff;
-}
-
-#emojiPanel .emoji-collections {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
-}
-
-#emojiPanel .emoji-collection {
-  min-width: 0;
-  overflow: hidden;
-  border: 1px solid #333333;
-  border-radius: 12px;
-  background: #171717;
-  color: #ffffff;
-}
-
-#emojiPanel .emoji-collection img {
-  display: block;
-  width: 100%;
-  height: 90px;
-  object-fit: contain;
-}
-
-#emojiPanel .emoji-collection span {
-  display: block;
-  padding: 8px 2px;
-  font-size: 11px;
-  text-align: center;
 }
