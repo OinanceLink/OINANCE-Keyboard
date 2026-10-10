@@ -124,52 +124,90 @@
       </div>
 
 
-      <!-- Custom emoji designs -->
-      <div id="emojiPanel" class="panel-content">
+      <!-- OINANCE Emoji Keyboard -->
+<div id="emojiPanel" class="panel-content">
 
-        <div class="panel-title">
-          My Black Emoji Designs
-        </div>
+  <div class="panel-title">
+    OINANCE Emojis 🖤
+  </div>
 
-        <p class="emoji-description">
-          Choose one of your three design collections.
-        </p>
+  <p class="emoji-description">
+    Choose your favourite emoji or explore our black emoji designs.
+  </p>
 
-        <div class="emoji-collections">
+  <!-- Standard emoji categories -->
+  <div class="emoji-tabs">
+    <button class="emoji-tab active" data-emoji-category="smileys">😀</button>
+    <button class="emoji-tab" data-emoji-category="hearts">❤️</button>
+    <button class="emoji-tab" data-emoji-category="hands">🙏</button>
+    <button class="emoji-tab" data-emoji-category="animals">🐈‍⬛</button>
+    <button class="emoji-tab" data-emoji-category="symbols">🔥</button>
+  </div>
 
-          <button class="emoji-collection" data-design="1">
-            <img
-              src="file_00000000061c8210aa2fa4943eef51be.jpg"
-              alt="Black emoji design collection 1"
-            >
-            <span>Collection 1</span>
-          </button>
+  <!-- Individual, tappable emojis -->
+  <div id="standardEmojiGrid" class="standard-emoji-grid">
+    <button class="standard-emoji" data-emoji="😀">😀</button>
+    <button class="standard-emoji" data-emoji="😂">😂</button>
+    <button class="standard-emoji" data-emoji="🥰">🥰</button>
+    <button class="standard-emoji" data-emoji="😘">😘</button>
+    <button class="standard-emoji" data-emoji="😎">😎</button>
+    <button class="standard-emoji" data-emoji="😴">😴</button>
+    <button class="standard-emoji" data-emoji="😭">😭</button>
+    <button class="standard-emoji" data-emoji="😍">😍</button>
+    <button class="standard-emoji" data-emoji="💪">💪</button>
+    <button class="standard-emoji" data-emoji="🙏">🙏</button>
+    <button class="standard-emoji" data-emoji="🖤">🖤</button>
+    <button class="standard-emoji" data-emoji="💖">💖</button>
+    <button class="standard-emoji" data-emoji="❤️">❤️</button>
+    <button class="standard-emoji" data-emoji="🐈‍⬛">🐈‍⬛</button>
+    <button class="standard-emoji" data-emoji="🔥">🔥</button>
+    <button class="standard-emoji" data-emoji="✨">✨</button>
+  </div>
 
-          <button class="emoji-collection" data-design="2">
-            <img
-              src="file_000000000a3081f490c98c485f6b3f66.jpg"
-              alt="Black emoji design collection 2"
-            >
-            <span>Collection 2</span>
-          </button>
+  <!-- Your brother's original black emoji designs -->
+  <div class="panel-title">
+    My Black Emoji Designs 🐈‍⬛
+  </div>
 
-          <button class="emoji-collection" data-design="3">
-            <img
-              src="file_00000000d2f08210bcccd3dcab977e0a.jpg"
-              alt="Black emoji design collection 3"
-            >
-            <span>Collection 3</span>
-          </button>
+  <p class="emoji-description">
+    Explore your three original design collections.
+  </p>
 
-        </div>
+  <div class="emoji-collections">
 
-        <p id="emojiStatus" class="emoji-status">
-          Select a collection to preview it.
-        </p>
+    <button class="emoji-collection" data-design="1">
+      <img
+        src="file_00000000061c8210aa2fa4943eef51be.jpg"
+        alt="Black emoji design collection 1"
+      >
+      <span>Collection 1</span>
+    </button>
 
-        <div id="emojiPreview" class="emoji-preview hidden"></div>
+    <button class="emoji-collection" data-design="2">
+      <img
+        src="file_000000000a3081f490c98c485f6b3f66.jpg"
+        alt="Black emoji design collection 2"
+      >
+      <span>Collection 2</span>
+    </button>
 
-      </div>
+    <button class="emoji-collection" data-design="3">
+      <img
+        src="file_00000000d2f08210bcccd3dcab977e0a.jpg"
+        alt="Black emoji design collection 3"
+      >
+      <span>Collection 3</span>
+    </button>
+
+  </div>
+
+  <p id="emojiStatus" class="emoji-status">
+    Select a collection to preview it.
+  </p>
+
+  <div id="emojiPreview" class="emoji-preview hidden"></div>
+
+</div>
 
 
       <!-- Calculator -->
