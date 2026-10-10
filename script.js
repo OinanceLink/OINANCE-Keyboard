@@ -276,48 +276,97 @@ emojiButton.addEventListener("click", () => {
 
 
 // ============================================
-// VOICE BUTTON
+// OINANCE VOICE TYPING
 // ============================================
 
 voiceButton.addEventListener("click", () => {
-  if (!("SpeechRecognition" in window) &&
-      !("webkitSpeechRecognition" in window)) {
+  const SpeechRecognition =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+  if (!SpeechRecognition) {
     alert(
       "Voice typing is not supported by this browser. " +
-      "We will add more voice support in a future version."
+      "Please try another browser."
     );
     return;
   }
 
-  const SpeechRecognition =
-    window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!window.isSecureContext) {
+    alert(
+      "Voice typing requires a secure connection. " +
+      "Please open OINANCE Keyboard using its HTTPS website."
+    );
+    return;
+  }
 
   const recognition = new SpeechRecognition();
 
-  recognition.lang = "en-NG";
+  recognition.lang = "en-US";
   recognition.interimResults = false;
   recognition.maxAlternatives = 1;
 
   voiceButton.classList.add("active");
+  voiceButton.disabled = true;
 
-  recognition.onresult = event => {
-    const spokenText = event.results[0][0].transcript;
-    insertText(spokenText + " ");
+  recognition.onstart = () => {
+    console.log("OINANCE Voice: Listening...");
   };
 
-  recognition.onerror = () => {
-    alert("Voice recognition could not start. Please try again.");
+  recognition.onresult = (event) => {
+    const spokenText =
+      event.results[0][0].transcript;
+
+    if (spokenText && spokenText.trim()) {
+      insertText(spokenText.trim() + " ");
+    }
+  };
+
+  recognition.onerror = (event) => {
+    console.error(
+      "OINANCE Voice error:",
+      event.error
+    );
+
+    const messages = {
+      "not-allowed":
+        "Microphone access was denied. Please check your browser permissions.",
+      "service-not-allowed":
+        "Your browser's speech service is blocked or unavailable.",
+      "network":
+        "The speech service could not connect. Check your internet connection and try again.",
+      "audio-capture":
+        "No microphone is available. Check your phone's microphone.",
+      "no-speech":
+        "I couldn't hear anything. Please speak clearly and try again.",
+      "language-not-supported":
+        "This speech service does not support the selected language."
+    };
+
+    alert(
+      messages[event.error] ||
+      "Voice typing failed (" +
+      event.error +
+      "). Please try again."
+    );
   };
 
   recognition.onend = () => {
     voiceButton.classList.remove("active");
+    voiceButton.disabled = false;
   };
 
   try {
     recognition.start();
   } catch (error) {
+    console.error("OINANCE Voice start error:", error);
+
     voiceButton.classList.remove("active");
-    alert("Please try voice typing again.");
+    voiceButton.disabled = false;
+
+    alert(
+      "Voice typing could not start. Please try again."
+    );
   }
 });
 
